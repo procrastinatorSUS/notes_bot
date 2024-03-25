@@ -9,13 +9,13 @@ from aiogram import Bot
 user_dict: dict[int, dict[str, str | int | bool]] = {}
 
 async def start_handler(message: Message, bot:Bot):
-    await message.answer("Здравстуйте! данный бот позволяет создавать заметки без различных приложений.\nЧтобы оставить заметку напишите команду /addnote\nМожно оставить до 10 заметок за раз.\nНапишите команду /help что бы узнать о всех возможностях бота.")
+    await message.answer("Привет! данный бот позволит тебе создать заметку.\nДобавить заметку по команде /addnote\nДоступно до 10 активных заметок.\nКоманда /help покажет возможности бота.")
     await bot.send_animation(message.chat.id,FSInputFile(path="C:\\Users\\Zver\\Desktop\\python\\notes_tg\\start.gif"))
 async def help_command(message:Message):
-    await message.answer('Ниже будет указана список доступных команд:\n/addnote — добавить заметку\n/mynotes — выводит список актуальных заметок\n/delnote — по выбору удаляет оставленную заметку\n/stopnotifications — останавливает отправку уведомлений\n/cancel — отменяет процесс создания заметки и её удаления')
+    await message.answer('Список доступных команд:\n/addnote — добавить заметку\n/mynotes — выводит список ваших заметок\n/delnote — по выбору удаляет оставленную заметку\n/stopnotifications — останавливает отправку уведомлений\n/cancel — отменяет процесс создания заметки и её удаления')
 
 async def MyNotes_handler(message: Message):
-    await message.answer("Вывожу список ваших заметок:")
+    await message.answer("Ваши заметки:")
     async with sq.connect('users.db') as db:
             cursor = await db.execute(f'SELECT user_id, txt, date from notes WHERE user_id = {message.from_user.id}')
             check = await cursor.fetchall()
@@ -79,7 +79,7 @@ async def warning_StopNotifications(message: Message):
 
 async def process_cancel_command(message: Message):
     await message.answer(
-        text='Вы не создаёте и не удаляете заметку, отменять нечего.\nчто бы оставить заметку напишите /addnote')
+        text='Вы не создаёте и не удаляете заметку, отменять нечего.\nЧто бы оставить заметку напишите /addnote')
 async def process_cancel_command_state(message: Message, state: FSMContext):
     await message.answer(
         text='Процедура создания заметку отменена!\n\n'

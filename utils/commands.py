@@ -14,7 +14,7 @@ async def set_commands(bot:Bot):
         ),
         BotCommand(
             command='mynotes',
-            description='мои активировнные заметки'
+            description='список записей'
         ),
         BotCommand(
             command='addnote',
@@ -22,15 +22,15 @@ async def set_commands(bot:Bot):
         ),
         BotCommand(
             command='delnote',
-            description='удалить заметку заметку'
+            description='удалить заметку'
         ),
         BotCommand(
             command='stopnotifications',
-            description='отключить отправку сообщений'
+            description='остановить отправку сообщений'
         ),
         BotCommand(
             command='cancel',
-            description='выйти из состояния закладок'
+            description='прекратить заполнять заметку'
         )
     ]
     await bot.set_my_commands(commands, BotCommandScopeDefault())

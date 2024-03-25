@@ -22,6 +22,7 @@ def notice():
             alert = cursor.fetchall()
             for i in alert:
                 requests.get(f"https://api.telegram.org/bot6552323918:AAHexHWmhL-khv6iL1J_6Mc2BQB-pXqeS5o/sendMessage?chat_id={i[1]}&text={i[2]}\n\nЧтобы отключить отправку сообщений напишите команду /stopnotifications")
+            
 
 if __name__ == '__main__':
     checktime()
