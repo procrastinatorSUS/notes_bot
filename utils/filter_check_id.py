@@ -30,3 +30,10 @@ class CheckNotifications(BaseFilter):
                 return True
             else:
                 return False
+            
+class CheckForMinute(BaseFilter):
+    async def __call__(self, message: Message) -> bool:
+        if message.text.isdigit() and (len(message.text) == 1 or len(message.text) == 2) and int(message.text) <= 59:
+            return True
+        else:
+            return False

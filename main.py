@@ -4,7 +4,6 @@ import logging
 from multiprocessing import Process 
 
 from alert_script import *
-
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums.parse_mode import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -14,11 +13,15 @@ from aiogram.fsm.state import default_state, State, StatesGroup
 
 from utils.commands import set_commands
 from handlers import *
-from utils.filter_check_id import CheckDatabaseLess, CheckDatabaseMore, CheckNotifications
+from utils.filter_check_id import CheckDatabaseLess, CheckDatabaseMore, CheckNotifications, CheckForMinute
+from generator_buttons import dict_days_31,dict_months, dict_hours
 
 class FSMNoteForm(StatesGroup):
     note_text = State()
-    note_date = State()
+    note_month = State()
+    note_days = State()
+    note_hours = State()
+    note_minute = State()
 class FSMNoteDel(StatesGroup):
     note_id = State()
 
@@ -35,13 +38,24 @@ async def main():
     dp.message.register(AddNote_handler, Command(commands='addnote'),StateFilter(default_state), CheckDatabaseLess())
     dp.message.register(warning_addnote, Command(commands='addnote'),StateFilter(default_state))
     
-    #ввод текста заметки и вроверка, что это текст
-    dp.message.register(process_note_text, StateFilter(FSMNoteForm.note_text),F.text)
+
+    #ввод текста заметки и проверка, что это текст
+    dp.message.register(process_note_text, StateFilter(FSMNoteForm.note_text),F.text and F.text.len() < 400)
     dp.message.register(warning_not_text, StateFilter(FSMNoteForm.note_text))
-    #ввод даты заметки и проверка, что она состоит из 8 символов
-    dp.message.register(process_note_date,StateFilter(FSMNoteForm.note_date), F.text.len() == 8)
-    dp.message.register(warning_not_date, StateFilter(FSMNoteForm.note_date))
-    
+    #ввод месяца
+    dp.callback_query.register(process_cur_month, StateFilter(FSMNoteForm.note_month),F.data.in_([i for i in dict_months.keys()]))
+    dp.message.register(warning_not_button, StateFilter(FSMNoteForm.note_month))
+    #ввод дня
+    dp.callback_query.register(process_cur_day, StateFilter(FSMNoteForm.note_days),F.data.in_([i for i in dict_days_31.keys()]))
+    dp.message.register(warning_not_button, StateFilter(FSMNoteForm.note_days))
+    #ввод часа
+    dp.callback_query.register(process_cur_hours,StateFilter(FSMNoteForm.note_hours), F.data.in_([i for i in dict_hours.keys()]))
+    dp.message.register(warning_not_button,StateFilter(FSMNoteForm.note_hours))
+    #ввод минуты
+    dp.message.register(process_cur_minute,StateFilter(FSMNoteForm.note_minute), CheckForMinute())
+    dp.message.register(warning_cur_minute,StateFilter(FSMNoteForm.note_minute))
+
+
     #удаление заметки и проверка, что больше одной заметки у человека
     dp.message.register(DelNote_handler, Command(commands='delnote'),StateFilter(default_state), CheckDatabaseMore())
     dp.message.register(process_note_del, StateFilter(FSMNoteDel.note_id))
@@ -62,4 +76,3 @@ if __name__ == "__main__":
     Process(target=notice).start()
     logging.basicConfig(level=logging.INFO)
     asyncio.run(main())
-    

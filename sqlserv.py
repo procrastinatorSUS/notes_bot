@@ -1,12 +1,12 @@
 import sqlite3
 import asyncio
 import aiosqlite as sq
-
 # Connect to the database
 try:
     con = sqlite3.connect("users.db")
     print("conected")
     cur = con.cursor()
+    #cur.execute(f'DELETE FROM notes WHERE user_id = 705256742') #удалить все заметки по айдишнику
     #cur.execute("DROP TABLE notes")
     #cur.execute("DROP TABLE notifications")
     #cur.execute("CREATE TABLE IF NOT EXISTS notes(id INTEGER PRIMARY KEY, user_id INT, txt char NOT NULL, date DATETIME)")
@@ -42,15 +42,3 @@ except Exception as ex:
 
 """
 
-
-async def checktime():
-    async with sq.connect('users.db') as db:
-        
-        #cursor = await db.execute('SELECT user_id, txt, timediff(date, "now") from notes')
-        #cursor = await db.execute('SELECT user_id, txt, datetime(date) = datetime("now", timediff(date, "now")) from notes')
-        cursor = await db.execute('SELECT user_id, txt, date from notes')
-        check = await cursor.fetchall()
-        for i in check:
-            print(i[0])
-
-asyncio.run(checktime())
