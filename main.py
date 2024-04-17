@@ -1,29 +1,7 @@
-import asyncio
-import aiosqlite as sq
-import logging
-from multiprocessing import Process 
-
-from alert_script import *
-from aiogram import Bot, Dispatcher, F
-from aiogram.enums.parse_mode import ParseMode
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.filters import Command, StateFilter
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import default_state, State, StatesGroup
-
-from utils.commands import set_commands
-from handlers import *
-from utils.filter_check_id import CheckDatabaseLess, CheckDatabaseMore, CheckNotifications, CheckForMinute
-from generator_buttons import dict_days_31,dict_months, dict_hours
-
-class FSMNoteForm(StatesGroup):
-    note_text = State()
-    note_month = State()
-    note_days = State()
-    note_hours = State()
-    note_minute = State()
-class FSMNoteDel(StatesGroup):
-    note_id = State()
+from All_imports_For_Project.MultiProc_Async_log import * #импорты библиотек async, logging, multiprocess
+from All_imports_For_Project.Aiogram_libs_Main import * #импорты для aiogram
+from All_imports_For_Project.self_imports_Main import * #импорты файлов из проекта
+from All_imports_For_Project.FSM_states_Main import * #все состояния в которые входит пользователь 
 
 async def main():
     bot = Bot(token='6552323918:AAHexHWmhL-khv6iL1J_6Mc2BQB-pXqeS5o', parse_mode=ParseMode.HTML)
