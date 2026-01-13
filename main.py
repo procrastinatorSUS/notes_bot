@@ -4,7 +4,7 @@ from All_imports_For_Project.self_imports_Main import * #импорты файл
 from All_imports_For_Project.FSM_states_Main import * #все состояния в которые входит пользователь 
 
 async def main():
-    bot = Bot(token='6552323918:AAHexHWmhL-khv6iL1J_6Mc2BQB-pXqeS5o', parse_mode=ParseMode.HTML)
+    bot = Bot(token='your_token', parse_mode=ParseMode.HTML)
     dp = Dispatcher(storage=MemoryStorage())
     await set_commands(bot)
     
